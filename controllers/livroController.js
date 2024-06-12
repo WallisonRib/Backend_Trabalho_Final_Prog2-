@@ -53,3 +53,24 @@ exports.deleteLivro = (req, res) => {
     res.send({ message: 'Livro deletado' });
   });
 };
+
+
+exports.searchLivros = (req, res) => {
+  const { query } = req.query; // Parâmetro de busca fornecido na consulta
+  const searchQuery = `%${query}%`; // Adiciona % para procurar o termo em qualquer posição
+  
+  connection.query(`
+    SELECT Livro.*, Autor.Nome AS AutorNome, Genero.Nome AS GeneroNome
+    FROM Livro
+    LEFT JOIN Autoria ON Livro.ISBN = Autoria.ISBN
+    LEFT JOIN Autor ON Autoria.CNPJ = Autor.CNPJ
+    LEFT JOIN GenLivro ON Livro.ISBN = GenLivro.ISBN
+    LEFT JOIN Genero ON GenLivro.codG = Genero.codG
+    WHERE Livro.ISBN LIKE $1 OR Livro.Nome LIKE $2 OR Livro.Descricao LIKE $3 OR Autor.Nome LIKE $4 OR Genero.Nome LIKE $5
+  `, [searchQuery, searchQuery, searchQuery, searchQuery, searchQuery], (err, results) => {
+    if (err) {
+      return res.status(500).send(err);
+    }
+    res.send(results);
+  });
+};

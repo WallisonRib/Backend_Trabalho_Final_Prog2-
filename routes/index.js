@@ -27,6 +27,8 @@ router.post('/livros', livroController.createLivro);
 router.get('/livros', livroController.getLivros);
 router.put('/livros/:ISBN', livroController.updateLivro);
 router.delete('/livros/:ISBN', livroController.deleteLivro);
+router.get('/livros/search', livroController.searchLivros);
+
 
 // Rotas CRUD para a tabela Autor
 router.post('/autores', autorController.createAutor);
