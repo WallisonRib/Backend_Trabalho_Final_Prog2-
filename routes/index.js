@@ -4,7 +4,7 @@ const router = express.Router();
 // Importar controladores
 const funcionarioController = require('../controllers/funcionarioController');
 const editoraController = require('../controllers/editoraController');
-const livroController = require('../controllers/livroController');
+const livroController = require('../controllers/LivroController');
 const autorController = require('../controllers/autorController');
 const autoriaController = require('../controllers/autoriaController');
 const generoController = require('../controllers/generoController');

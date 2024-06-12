@@ -13,13 +13,21 @@ exports.createLivro = (req, res) => {
 };
 
 exports.getLivros = (req, res) => {
-  connection.query('SELECT * FROM Livro', (err, results) => {
+  connection.query(`
+    SELECT Livro.*, Autor.Nome AS AutorNome, Genero.Nome AS GeneroNome
+    FROM Livro
+    LEFT JOIN Autoria ON Livro.ISBN = Autoria.ISBN
+    LEFT JOIN Autor ON Autoria.CNPJ = Autor.CNPJ
+    LEFT JOIN GenLivro ON Livro.ISBN = GenLivro.ISBN
+    LEFT JOIN Genero ON GenLivro.codG = Genero.codG
+  `, (err, results) => {
     if (err) {
       return res.status(500).send(err);
     }
-    res.send(results.rows);
+    res.send(results);
   });
 };
+
 
 exports.updateLivro = (req, res) => {
   const { ISBN } = req.params;
