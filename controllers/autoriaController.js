@@ -2,7 +2,9 @@ const connection = require('../config/database');
 
 exports.createAutoria = (req, res) => {
   const { CNPJ, ISBN } = req.body;
-  connection.query('INSERT INTO Autoria (CNPJ, ISBN) VALUES (?, ?)', [CNPJ, ISBN], (err, result) => {
+  const query = 'INSERT INTO Autoria (CNPJ, ISBN) VALUES ($1, $2)';
+
+  connection.query(query, [CNPJ, ISBN], (err, result) => {
     if (err) {
       return res.status(500).send(err);
     }
@@ -15,13 +17,15 @@ exports.getAutorias = (req, res) => {
     if (err) {
       return res.status(500).send(err);
     }
-    res.send(results);
+    res.send(results.rows);
   });
 };
 
 exports.deleteAutoria = (req, res) => {
   const { CNPJ, ISBN } = req.body;
-  connection.query('DELETE FROM Autoria WHERE CNPJ = ? AND ISBN = ?', [CNPJ, ISBN], (err, result) => {
+  const query = 'DELETE FROM Autoria WHERE CNPJ = $1 AND ISBN = $2';
+
+  connection.query(query, [CNPJ, ISBN], (err, result) => {
     if (err) {
       return res.status(500).send(err);
     }

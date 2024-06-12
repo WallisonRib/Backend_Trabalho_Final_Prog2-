@@ -2,7 +2,9 @@ const connection = require('../config/database');
 
 exports.createGenLivro = (req, res) => {
   const { codG, ISBN } = req.body;
-  connection.query('INSERT INTO GenLivro (codG, ISBN) VALUES (?, ?)', [codG, ISBN], (err, result) => {
+  const query = 'INSERT INTO GenLivro (codG, ISBN) VALUES ($1, $2)';
+
+  connection.query(query, [codG, ISBN], (err, result) => {
     if (err) {
       return res.status(500).send(err);
     }
@@ -15,13 +17,15 @@ exports.getGenLivros = (req, res) => {
     if (err) {
       return res.status(500).send(err);
     }
-    res.send(results);
+    res.send(results.rows);
   });
 };
 
 exports.deleteGenLivro = (req, res) => {
   const { codG, ISBN } = req.body;
-  connection.query('DELETE FROM GenLivro WHERE codG = ? AND ISBN = ?', [codG, ISBN], (err, result) => {
+  const query = 'DELETE FROM GenLivro WHERE codG = $1 AND ISBN = $2';
+
+  connection.query(query, [codG, ISBN], (err, result) => {
     if (err) {
       return res.status(500).send(err);
     }

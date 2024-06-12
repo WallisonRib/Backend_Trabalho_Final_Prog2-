@@ -2,7 +2,9 @@ const connection = require('../config/database');
 
 exports.createAutor = (req, res) => {
   const { CNPJ, Nome } = req.body;
-  connection.query('INSERT INTO Autor (CNPJ, Nome) VALUES (?, ?)', [CNPJ, Nome], (err, result) => {
+  const query = 'INSERT INTO Autor (CNPJ, Nome) VALUES ($1, $2)';
+
+  connection.query(query, [CNPJ, Nome], (err, result) => {
     if (err) {
       return res.status(500).send(err);
     }
@@ -15,14 +17,16 @@ exports.getAutores = (req, res) => {
     if (err) {
       return res.status(500).send(err);
     }
-    res.send(results);
+    res.send(results.rows);
   });
 };
 
 exports.updateAutor = (req, res) => {
   const { CNPJ } = req.params;
   const { Nome } = req.body;
-  connection.query('UPDATE Autor SET Nome = ? WHERE CNPJ = ?', [Nome, CNPJ], (err, result) => {
+  const query = 'UPDATE Autor SET Nome = $1 WHERE CNPJ = $2';
+
+  connection.query(query, [Nome, CNPJ], (err, result) => {
     if (err) {
       return res.status(500).send(err);
     }
@@ -32,7 +36,9 @@ exports.updateAutor = (req, res) => {
 
 exports.deleteAutor = (req, res) => {
   const { CNPJ } = req.params;
-  connection.query('DELETE FROM Autor WHERE CNPJ = ?', [CNPJ], (err, result) => {
+  const query = 'DELETE FROM Autor WHERE CNPJ = $1';
+
+  connection.query(query, [CNPJ], (err, result) => {
     if (err) {
       return res.status(500).send(err);
     }

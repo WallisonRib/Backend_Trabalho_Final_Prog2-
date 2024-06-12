@@ -2,7 +2,9 @@ const connection = require('../config/database');
 
 exports.createGenero = (req, res) => {
   const { Nome } = req.body;
-  connection.query('INSERT INTO Genero (Nome) VALUES (?)', [Nome], (err, result) => {
+  const query = 'INSERT INTO Genero (Nome) VALUES ($1)';
+
+  connection.query(query, [Nome], (err, result) => {
     if (err) {
       return res.status(500).send(err);
     }
@@ -15,14 +17,16 @@ exports.getGeneros = (req, res) => {
     if (err) {
       return res.status(500).send(err);
     }
-    res.send(results);
+    res.send(results.rows);
   });
 };
 
 exports.updateGenero = (req, res) => {
   const { codG } = req.params;
   const { Nome } = req.body;
-  connection.query('UPDATE Genero SET Nome = ? WHERE codG = ?', [Nome, codG], (err, result) => {
+  const query = 'UPDATE Genero SET Nome = $1 WHERE codG = $2';
+
+  connection.query(query, [Nome, codG], (err, result) => {
     if (err) {
       return res.status(500).send(err);
     }
@@ -32,7 +36,9 @@ exports.updateGenero = (req, res) => {
 
 exports.deleteGenero = (req, res) => {
   const { codG } = req.params;
-  connection.query('DELETE FROM Genero WHERE codG = ?', [codG], (err, result) => {
+  const query = 'DELETE FROM Genero WHERE codG = $1';
+
+  connection.query(query, [codG], (err, result) => {
     if (err) {
       return res.status(500).send(err);
     }

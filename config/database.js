@@ -1,17 +1,16 @@
 const { Pool } = require('pg');
+require('dotenv').config();  // Carrega as variáveis de ambiente do .env
 
-const pool = new Pool({
-  host: process.env.HOST,
-  user: process.env.USER,
-  password: process.env.PASSWORD,
-  database: process.env.DATABASE,
-  port: process.env.PORT,  // Adicione a porta se necessário, por padrão é 5432
+const connectionString = process.env.POSTGRES_URL;  // Use a URL completa de conexão
+
+const connection = new Pool({
+  connectionString: connectionString,
   ssl: {
-    rejectUnauthorized: false,  // Use SSL se necessário
+    rejectUnauthorized: false  // Certifique-se de que isso está configurado conforme necessário
   }
 });
 
-pool.connect(err => {
+connection.connect(err => {
   if (err) {
     console.error('Erro ao conectar ao banco de dados:', err);
     return;
@@ -19,4 +18,4 @@ pool.connect(err => {
   console.log('Conectado ao banco de dados PostgreSQL!');
 });
 
-module.exports = pool;
+module.exports = connection;
