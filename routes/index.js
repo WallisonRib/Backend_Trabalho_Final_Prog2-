@@ -1,11 +1,15 @@
 const express = require('express');
 const cors = require('cors');
 
-const app = express(); // Certifique-se de definir a instância do Express
-const router = express.Router();
-app.use(express.json()); // Middleware para parsear JSON
+const app = express();
 
-app.use(cors()); // Use o middleware CORS antes das rotas
+// Configurar CORS para permitir requisições de 'http://localhost:5173'
+app.use(cors({
+    origin: 'http://localhost:5173'
+}));
+
+app.use(express.json());
+
 // Importar controladores
 const funcionarioController = require('../controllers/funcionarioController');
 const editoraController = require('../controllers/editoraController');
@@ -16,6 +20,7 @@ const generoController = require('../controllers/generoController');
 const genLivroController = require('../controllers/genLivroController');
 
 // Rotas CRUD para a tabela Funcionario
+const router = express.Router();
 router.post('/funcionarios', funcionarioController.createFuncionario);
 router.get('/funcionarios', funcionarioController.getFuncionarios);
 router.put('/funcionarios/:CPF', funcionarioController.updateFuncionario);
@@ -32,8 +37,7 @@ router.post('/livros', livroController.createLivro);
 router.get('/livros', livroController.getLivros);
 router.put('/livros/:ISBN', livroController.updateLivro);
 router.delete('/livros/:ISBN', livroController.deleteLivro);
-router.get('/livros/search', livroController.searchLivros); // localhost:3000/api/livros/search?query=Java
-
+router.get('/livros/search', livroController.searchLivros);
 
 // Rotas CRUD para a tabela Autor
 router.post('/autores', autorController.createAutor);
@@ -57,4 +61,13 @@ router.post('/genlivros', genLivroController.createGenLivro);
 router.get('/genlivros', genLivroController.getGenLivros);
 router.delete('/genlivros', genLivroController.deleteGenLivro);
 
-module.exports = router;
+// Use as rotas no aplicativo Express
+app.use('/api', router);
+
+// Iniciar o servidor
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => {
+    console.log(`Servidor rodando na porta ${PORT}`);
+});
+
+module.exports = app;
