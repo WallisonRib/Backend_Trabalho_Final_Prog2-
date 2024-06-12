@@ -1,10 +1,15 @@
 const express = require('express');
-const router = express.Router();
+const cors = require('cors');
 
+const app = express(); // Certifique-se de definir a instância do Express
+const router = express.Router();
+app.use(express.json()); // Middleware para parsear JSON
+
+app.use(cors()); // Use o middleware CORS antes das rotas
 // Importar controladores
 const funcionarioController = require('../controllers/funcionarioController');
 const editoraController = require('../controllers/editoraController');
-const livroController = require('../controllers/livroController');
+const livroController = require('../controllers/LivroController');
 const autorController = require('../controllers/autorController');
 const autoriaController = require('../controllers/autoriaController');
 const generoController = require('../controllers/generoController');
@@ -27,7 +32,7 @@ router.post('/livros', livroController.createLivro);
 router.get('/livros', livroController.getLivros);
 router.put('/livros/:ISBN', livroController.updateLivro);
 router.delete('/livros/:ISBN', livroController.deleteLivro);
-router.get('/livros/search', livroController.searchLivros);
+router.get('/livros/search', livroController.searchLivros); // localhost:3000/api/livros/search?query=Java
 
 
 // Rotas CRUD para a tabela Autor
