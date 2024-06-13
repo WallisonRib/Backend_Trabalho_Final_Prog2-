@@ -74,6 +74,7 @@ exports.searchLivros = (req, res) => {
     res.send(results);
   });
 };
+
 exports.getLivroByIsbn = async (req, res) => {
   const { isbn } = req.params;
   console.log('ISBN recebido:', isbn); // Verifica se o ISBN está sendo recebido corretamente

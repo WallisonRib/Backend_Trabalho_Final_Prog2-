@@ -38,7 +38,7 @@ router.get('/livros', livroController.getLivros);
 router.put('/livros/:ISBN', livroController.updateLivro);
 router.delete('/livros/:ISBN', livroController.deleteLivro);
 router.get('/livros/search', livroController.searchLivros);
-app.get('/api/livros/:isbn', livroController.getLivroByIsbn);
+router.get('/livros/:isbn', livroController.getLivroByIsbn);
 
 
 // Rotas CRUD para a tabela Autor
