@@ -5,7 +5,7 @@ const app = express();
 
 // Configurar CORS para permitir requisições de 'http://localhost:5173'
 app.use(cors({
-    origin: 'econolivros.vercel.app'
+    origin: 'http://localhost:5173'
 }));
 
 app.use(express.json());
