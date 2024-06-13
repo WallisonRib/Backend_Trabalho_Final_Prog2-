@@ -74,3 +74,22 @@ exports.searchLivros = (req, res) => {
     res.send(results);
   });
 };
+exports.getLivroByIsbn = async (req, res) => {
+  const { isbn } = req.params;
+  console.log('ISBN recebido:', isbn); // Verifica se o ISBN está sendo recebido corretamente
+
+  try {
+      const query = 'SELECT * FROM Livro WHERE ISBN = $1';
+      const result = await connection.query(query, [isbn]);
+      console.log('Resultado da consulta:', result.rows); // Verifica o resultado da consulta
+
+      if (result.rows.length === 0) {
+          return res.status(404).json({ message: 'Livro não encontrado' });
+      }
+
+      res.json(result.rows[0]); // Retorna o primeiro livro encontrado
+  } catch (error) {
+      console.error('Erro ao buscar livro por ISBN:', error);
+      res.status(500).json({ message: 'Erro interno ao buscar livro' });
+  }
+};

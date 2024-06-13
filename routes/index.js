@@ -38,6 +38,8 @@ router.get('/livros', livroController.getLivros);
 router.put('/livros/:ISBN', livroController.updateLivro);
 router.delete('/livros/:ISBN', livroController.deleteLivro);
 router.get('/livros/search', livroController.searchLivros);
+app.get('/api/livros/:isbn', livroController.getLivroByIsbn);
+
 
 // Rotas CRUD para a tabela Autor
 router.post('/autores', autorController.createAutor);
@@ -65,7 +67,7 @@ router.delete('/genlivros', genLivroController.deleteGenLivro);
 app.use('/api', router);
 
 // Iniciar o servidor
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 3001;
 app.listen(PORT, () => {
     console.log(`Servidor rodando na porta ${PORT}`);
 });
