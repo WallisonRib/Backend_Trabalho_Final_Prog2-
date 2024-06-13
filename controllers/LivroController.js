@@ -54,11 +54,11 @@ exports.deleteLivro = (req, res) => {
   });
 };
 
-
 exports.searchLivros = (req, res) => {
   const { query } = req.query; // Parâmetro de busca fornecido na consulta
   const searchQuery = `%${query}%`; // Adiciona % para procurar o termo em qualquer posição
-  
+  const lowerQuery = query.toLowerCase(); // Converter para minúsculas
+
   connection.query(`
     SELECT Livro.*, Autor.Nome AS AutorNome, Genero.Nome AS GeneroNome
     FROM Livro
@@ -66,14 +66,19 @@ exports.searchLivros = (req, res) => {
     LEFT JOIN Autor ON Autoria.CNPJ = Autor.CNPJ
     LEFT JOIN GenLivro ON Livro.ISBN = GenLivro.ISBN
     LEFT JOIN Genero ON GenLivro.codG = Genero.codG
-    WHERE Livro.ISBN LIKE $1 OR Livro.Nome LIKE $2 OR Livro.Descricao LIKE $3 OR Autor.Nome LIKE $4 OR Genero.Nome LIKE $5
-  `, [searchQuery, searchQuery, searchQuery, searchQuery, searchQuery], (err, results) => {
+    WHERE Livro.ISBN LIKE $1 
+      OR LOWER(Livro.Nome) LIKE $2 
+      OR LOWER(Livro.Descricao) LIKE $3 
+      OR EXISTS (SELECT 1 FROM Autoria WHERE Livro.ISBN = Autoria.ISBN AND LOWER(Autor.Nome) LIKE $4)
+      OR EXISTS (SELECT 1 FROM GenLivro WHERE Livro.ISBN = GenLivro.ISBN AND LOWER(Genero.Nome) LIKE $5)
+  `, [searchQuery, `%${lowerQuery}%`, `%${lowerQuery}%`, `%${lowerQuery}%`, `%${lowerQuery}%`], (err, results) => {
     if (err) {
       return res.status(500).send(err);
     }
     res.send(results);
   });
 };
+
 
 exports.getLivroByIsbn = async (req, res) => {
   const { isbn } = req.params;
