@@ -79,13 +79,21 @@ exports.searchLivros = (req, res) => {
   });
 };
 
-
 exports.getLivroByIsbn = async (req, res) => {
   const { isbn } = req.params;
   console.log('ISBN recebido:', isbn); // Verifica se o ISBN está sendo recebido corretamente
 
   try {
-      const query = 'SELECT * FROM Livro WHERE ISBN = $1';
+      const query = `
+          SELECT Livro.*, 
+                 Autor.Nome AS autor, 
+                 Editora.Nome AS editora
+          FROM Livro
+          LEFT JOIN Autoria ON Livro.ISBN = Autoria.ISBN
+          LEFT JOIN Autor ON Autoria.CNPJ = Autor.CNPJ
+          LEFT JOIN Editora ON Livro.Editora = Editora.CNPJ
+          WHERE Livro.ISBN = $1
+      `;
       const result = await connection.query(query, [isbn]);
       console.log('Resultado da consulta:', result.rows); // Verifica o resultado da consulta
 
