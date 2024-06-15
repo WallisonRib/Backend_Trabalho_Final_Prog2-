@@ -53,29 +53,34 @@ exports.deleteLivro = (req, res) => {
     res.send({ message: 'Livro deletado' });
   });
 };
-
 exports.searchLivros = (req, res) => {
   const { query } = req.query; // Parâmetro de busca fornecido na consulta
   const searchQuery = `%${query}%`; // Adiciona % para procurar o termo em qualquer posição
   const lowerQuery = query.toLowerCase(); // Converter para minúsculas
 
   connection.query(`
-    SELECT Livro.*, Autor.Nome AS AutorNome, Genero.Nome AS GeneroNome
+    SELECT DISTINCT ON (Livro.ISBN) Livro.*, 
+           Autor.Nome AS AutorNome, 
+           Editora.Nome AS EditoraNome, 
+           array_agg(DISTINCT Genero.Nome) AS GeneroNome
     FROM Livro
     LEFT JOIN Autoria ON Livro.ISBN = Autoria.ISBN
     LEFT JOIN Autor ON Autoria.CNPJ = Autor.CNPJ
     LEFT JOIN GenLivro ON Livro.ISBN = GenLivro.ISBN
     LEFT JOIN Genero ON GenLivro.codG = Genero.codG
+    LEFT JOIN Editora ON Livro.Editora = Editora.CNPJ
     WHERE Livro.ISBN LIKE $1 
       OR LOWER(Livro.Nome) LIKE $2 
       OR LOWER(Livro.Descricao) LIKE $3 
-      OR EXISTS (SELECT 1 FROM Autoria WHERE Livro.ISBN = Autoria.ISBN AND LOWER(Autor.Nome) LIKE $4)
-      OR EXISTS (SELECT 1 FROM GenLivro WHERE Livro.ISBN = GenLivro.ISBN AND LOWER(Genero.Nome) LIKE $5)
-  `, [searchQuery, `%${lowerQuery}%`, `%${lowerQuery}%`, `%${lowerQuery}%`, `%${lowerQuery}%`], (err, results) => {
+      OR LOWER(Autor.Nome) LIKE $4
+      OR LOWER(Genero.Nome) LIKE $5
+      OR LOWER(Editora.Nome) LIKE $6
+    GROUP BY Livro.ISBN, Autor.Nome, Editora.Nome
+  `, [searchQuery, `%${lowerQuery}%`, `%${lowerQuery}%`, `%${lowerQuery}%`, `%${lowerQuery}%`, `%${lowerQuery}%`], (err, results) => {
     if (err) {
       return res.status(500).send(err);
     }
-    res.send(results);
+    res.send(results.rows); // Certifique-se de que você está retornando os dados corretamente
   });
 };
 
