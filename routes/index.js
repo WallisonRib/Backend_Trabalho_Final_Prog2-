@@ -2,6 +2,7 @@
 
 const express = require('express');
 const router = express.Router();
+
 const funcionarioController = require('../controllers/funcionarioController');
 const editoraController = require('../controllers/editoraController');
 const livroController = require('../controllers/LivroController');

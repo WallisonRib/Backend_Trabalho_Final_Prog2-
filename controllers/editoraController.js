@@ -17,7 +17,7 @@ exports.getEditoras = (req, res) => {
     if (err) {
       return res.status(500).send(err);
     }
-    res.send(results.rows);
+    res.send(results);
   });
 };
 
