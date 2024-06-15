@@ -62,7 +62,7 @@ exports.searchLivros = (req, res) => {
     SELECT DISTINCT ON (Livro.ISBN) Livro.*, 
            Autor.Nome AS AutorNome, 
            Editora.Nome AS EditoraNome, 
-           array_agg(DISTINCT Genero.Nome) AS GeneroNome
+           Genero.Nome AS GeneroNome
     FROM Livro
     LEFT JOIN Autoria ON Livro.ISBN = Autoria.ISBN
     LEFT JOIN Autor ON Autoria.CNPJ = Autor.CNPJ
@@ -75,14 +75,14 @@ exports.searchLivros = (req, res) => {
       OR LOWER(Autor.Nome) LIKE $4
       OR LOWER(Genero.Nome) LIKE $5
       OR LOWER(Editora.Nome) LIKE $6
-    GROUP BY Livro.ISBN, Autor.Nome, Editora.Nome
   `, [searchQuery, `%${lowerQuery}%`, `%${lowerQuery}%`, `%${lowerQuery}%`, `%${lowerQuery}%`, `%${lowerQuery}%`], (err, results) => {
     if (err) {
       return res.status(500).send(err);
     }
-    res.send(results.rows); // Certifique-se de que você está retornando os dados corretamente
+    res.send(results); // Certifique-se de que você está retornando os dados corretamente
   });
 };
+
 
 exports.getLivroByIsbn = async (req, res) => {
   const { isbn } = req.params;
