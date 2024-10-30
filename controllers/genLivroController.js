@@ -12,7 +12,7 @@ exports.createGenLivro = (req, res) => {
   });
 };
 
-exports.getGenLivros = (req, res) => {
+exports.getGenLivros = (req, res) => { 
   connection.query('SELECT * FROM GenLivro', (err, results) => {
     if (err) {
       return res.status(500).send(err);
