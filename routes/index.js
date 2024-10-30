@@ -30,6 +30,7 @@ router.put('/livros/:ISBN', livroController.updateLivro);
 router.delete('/livros/:ISBN', livroController.deleteLivro);
 router.get('/livros/search', livroController.searchLivros);
 router.get('/livros/:isbn', livroController.getLivroByIsbn);
+router.post('/livros/review/:isbn',livroController.createReview)
 
 // Autores
 router.post('/autores', autorController.createAutor);
