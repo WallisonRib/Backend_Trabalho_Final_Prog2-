@@ -91,10 +91,9 @@ exports.deleteLivro = (req, res) => {
     res.send({ message: 'Livro deletado' });
   });
 };
-
 exports.searchLivros = (req, res) => {
   const { query } = req.query;
-  const searchQuery = `%${query}%`;
+  const searchQuery = `%${query.toLowerCase()}%`; // Use lower case para a comparação
 
   connection.query(`
     SELECT DISTINCT ON (Livro.ISBN) Livro.*, 
@@ -107,18 +106,19 @@ exports.searchLivros = (req, res) => {
     LEFT JOIN GenLivro ON Livro.ISBN = GenLivro.ISBN
     LEFT JOIN Genero ON GenLivro.codG = Genero.codG
     LEFT JOIN Editora ON Livro.Editora = Editora.CNPJ
-    
     WHERE Livro.ISBN LIKE $1 
       OR LOWER(Livro.Nome) LIKE $1 
       OR LOWER(Livro.Descricao) LIKE $1 
       OR LOWER(Autor.Nome) LIKE $1
       OR LOWER(Genero.Nome) LIKE $1
       OR LOWER(Editora.Nome) LIKE $1
+    ORDER BY Livro.ISBN, Autor.Nome
   `, [searchQuery], (err, results) => {
     if (err) {
+      console.error('Erro ao buscar livros:', err); // Log do erro
       return res.status(500).send(err);
     }
-    res.send(results);
+    res.send(results.rows); // Alterado para .rows se você estiver usando o módulo `pg`
   });
 };
 
