@@ -24,6 +24,7 @@ router.put('/editoras/:CNPJ', editoraController.updateEditora);
 router.delete('/editoras/:CNPJ', editoraController.deleteEditora);
 
 // Livros
+router.get('/livros/top', livroController.getLivrosView);
 router.post('/livros', livroController.createLivro);
 router.get('/livros', livroController.getLivros);
 router.put('/livros/:ISBN', livroController.updateLivro);
@@ -31,6 +32,7 @@ router.delete('/livros/:ISBN', livroController.deleteLivro);
 router.get('/livros/search', livroController.searchLivros);
 router.get('/livros/:isbn', livroController.getLivroByIsbn);
 router.post('/livros/review/:isbn',livroController.createReview)
+
 
 // Autores
 router.post('/autores', autorController.createAutor);
