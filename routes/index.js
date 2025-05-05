@@ -1,59 +1,22 @@
-// routes/index.js
-
 const express = require('express');
 const router = express.Router();
 
-const funcionarioController = require('../controllers/funcionarioController');
-const editoraController = require('../controllers/editoraController');
-const livroController = require('../controllers/LivroController');
-const autorController = require('../controllers/autorController');
-const autoriaController = require('../controllers/autoriaController');
-const generoController = require('../controllers/generoController');
-const genLivroController = require('../controllers/genLivroController');
+// Importações de todos os arquivos de rota
+const livrosRoutes = require('./livros');
+const funcionariosRoutes = require('./funcionarios');
+const editorasRoutes = require('./editoras');
+const autoresRoutes = require('./autores');
+const autoriasRoutes = require('./autorias');
+const generosRoutes = require('./generos');
+const genLivrosRoutes = require('./genLivros');
 
-// Funcionarios
-router.post('/funcionarios', funcionarioController.createFuncionario);
-router.get('/funcionarios', funcionarioController.getFuncionarios);
-router.put('/funcionarios/:CPF', funcionarioController.updateFuncionario);
-router.delete('/funcionarios/:CPF', funcionarioController.deleteFuncionario);
-
-// Editoras
-router.post('/editoras', editoraController.createEditora);
-router.get('/editoras', editoraController.getEditoras);
-router.put('/editoras/:CNPJ', editoraController.updateEditora);
-router.delete('/editoras/:CNPJ', editoraController.deleteEditora);
-
-// Livros
-router.get('/livros/top', livroController.getLivrosView);
-router.post('/livros', livroController.createLivro);
-router.get('/livros', livroController.getLivros);
-router.put('/livros/:ISBN', livroController.updateLivro);
-router.delete('/livros/:ISBN', livroController.deleteLivro);
-router.get('/livros/search', livroController.searchLivros);
-router.get('/livros/:isbn', livroController.getLivroByIsbn);
-router.post('/livros/review/:isbn',livroController.createReview)
-
-
-// Autores
-router.post('/autores', autorController.createAutor);
-router.get('/autores', autorController.getAutores);
-router.put('/autores/:CNPJ', autorController.updateAutor);
-router.delete('/autores/:CNPJ', autorController.deleteAutor);
-
-// Autorias
-router.post('/autorias', autoriaController.createAutoria);
-router.get('/autorias', autoriaController.getAutorias);
-router.delete('/autorias', autoriaController.deleteAutoria);
-
-// Generos
-router.post('/generos', generoController.createGenero);
-router.get('/generos', generoController.getGeneros);
-router.put('/generos/:codG', generoController.updateGenero);
-router.delete('/generos/:codG', generoController.deleteGenero);
-
-// GenLivros
-router.post('/genlivros', genLivroController.createGenLivro);
-router.get('/genlivros', genLivroController.getGenLivros);
-router.delete('/genlivros', genLivroController.deleteGenLivro);
+// Agrupamento dos prefixos da API
+router.use('/', livrosRoutes);         // /api/livros e suas rotas (inclui /top e /:isbn)
+router.use('/', funcionariosRoutes);          // /api/funcionarios
+router.use('/', editorasRoutes);              // /api/editoras
+router.use('/', autoresRoutes);               // /api/autores
+router.use('/', autoriasRoutes);              // /api/autorias
+router.use('/', generosRoutes);               // /api/generos
+router.use('/', genLivrosRoutes);             // /api/genlivros
 
 module.exports = router;
