@@ -72,7 +72,7 @@ router.post('/livros', livroController.createLivro);
  *       200:
  *         description: Lista dos livros mais visualizados
  */
-router.get('livros/top', livroController.getLivrosView);
+router.get('/livros/top', livroController.getLivrosView);
 
 
 /**
