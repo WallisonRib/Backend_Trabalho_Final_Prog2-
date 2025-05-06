@@ -94,7 +94,7 @@ router.get('/livros/top', livroController.getLivrosView);
  *       404:
  *         description: Livro não encontrado
  */
-router.get('livros/:isbn', livroController.getLivroByIsbn);
+router.get('/livros/:isbn', livroController.getLivroByIsbn);
 
 
 /**
@@ -141,7 +141,7 @@ router.get('livros/:isbn', livroController.getLivroByIsbn);
  *       404:
  *         description: Livro não encontrado
  */
-router.put('livros/:isbn', livroController.updateLivro);
+router.put('/livros/:isbn', livroController.updateLivro);
 
 /**
  * @swagger
@@ -162,7 +162,7 @@ router.put('livros/:isbn', livroController.updateLivro);
  *       404:
  *         description: Livro não encontrado
  */
-router.delete('livros/:isbn', livroController.deleteLivro);
+router.delete('/livros/:isbn', livroController.deleteLivro);
 
 /**
  * @swagger
@@ -199,7 +199,7 @@ router.delete('livros/:isbn', livroController.deleteLivro);
  *       500:
  *         description: Erro ao inserir review
  */
-router.post('livros/:isbn/reviews', livroController.createReview);
+router.post('/livros/:isbn/reviews', livroController.createReview);
 
 /**
  * @swagger
