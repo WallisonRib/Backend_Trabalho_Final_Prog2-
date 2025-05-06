@@ -1,31 +1,22 @@
-const swaggerJSDoc = require('swagger-jsdoc');
-const swaggerUi = require('swagger-ui-express'); // Importar também o swagger-ui-express
+// swagger.js
+const swaggerJsdoc = require('swagger-jsdoc');
+const swaggerUi = require('swagger-ui-express');
 
-const swaggerDefinition = {
-  openapi: '3.0.0',
-  info: {
-    title: 'API para Livraria com PostgreSQL',
-    version: '1.0.0',
-    description: 'Documentação gerada com Swagger',
+const swaggerOptions = {
+  definition: {
+    openapi: '3.0.0',
+    info: {
+      title: 'API de Livros',
+      version: '1.0.0',
+      description: 'Documentação gerada via Swagger',
+    },
   },
-  servers: [
-    {
-      url: 'http://localhost:3000',
-      description: 'Servidor de desenvolvimento'
-    }
-  ]
+  apis: ['./routes/*.js'], // Caminho dos arquivos com comentários do Swagger
 };
 
-const options = {
-  swaggerDefinition,
-  apis: ['./routes/*.js']
-};
+const specs = swaggerJsdoc(swaggerOptions);
 
-const swaggerSpec = swaggerJSDoc(options);
-
-module.exports = { 
-  swaggerSpec,
-  setupSwagger: (app) => {
-    app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
-  }
+module.exports = {
+  swaggerUi,
+  specs,
 };
