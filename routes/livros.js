@@ -62,6 +62,7 @@ router.get('/livros', livroController.getLivros);
  */
 router.post('/livros', livroController.createLivro);
 
+
 /**
  * @swagger
  * /api/livros/top:
@@ -74,6 +75,24 @@ router.post('/livros', livroController.createLivro);
  */
 router.get('/livros/top', livroController.getLivrosView);
 
+/**
+ * @swagger
+ * /api/livros/search:
+ *   get:
+ *     summary: Busca livros por nome
+ *     tags: [Livros]
+ *     parameters:
+ *       - in: query
+ *         name: Nome
+ *         schema:
+ *           type: string
+ *         required: false
+ *         description: Nome do livro a ser buscado
+ *     responses:
+ *       200:
+ *         description: Livros encontrados
+ */
+router.get('/livros/search', livroController.searchLivros);
 
 /**
  * @swagger
@@ -200,24 +219,5 @@ router.delete('/livros/:isbn', livroController.deleteLivro);
  *         description: Erro ao inserir review
  */
 router.post('/livros/:isbn/reviews', livroController.createReview);
-
-/**
- * @swagger
- * /api/livros/search:
- *   get:
- *     summary: Busca livros por nome
- *     tags: [Livros]
- *     parameters:
- *       - in: query
- *         name: Nome
- *         schema:
- *           type: string
- *         required: false
- *         description: Nome do livro a ser buscado
- *     responses:
- *       200:
- *         description: Livros encontrados
- */
-router.get('/livros/search', livroController.searchLivros);
 
 module.exports = router;
